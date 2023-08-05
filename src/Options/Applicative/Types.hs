@@ -46,7 +46,8 @@ module Options.Applicative.Types (
   optMetaVar,
   optHelp,
   optShowDefault,
-  optDescMod
+  optDescMod,
+  optShowAllowed
   ) where
 
 import Control.Applicative
@@ -155,10 +156,11 @@ data OptProperties = OptProperties
   , propShowDefault :: Maybe String       -- ^ what to show in the help text as the default
   , propShowGlobal :: Bool                -- ^ whether the option is presented in global options text
   , propDescMod :: Maybe ( Doc -> Doc )   -- ^ a function to run over the brief description
+  , propShowAllowed :: Chunk Doc       -- ^ what to show in the help text as the allowed values
   }
 
 instance Show OptProperties where
-  showsPrec p (OptProperties pV pH pMV pSD pSG _)
+  showsPrec p (OptProperties pV pH pMV pSD pSG _ pSA)
     = showParen (p >= 11)
     $ showString "OptProperties { propVisibility = " . shows pV
     . showString ", propHelp = " . shows pH
@@ -166,6 +168,7 @@ instance Show OptProperties where
     . showString ", propShowDefault = " . shows pSD
     . showString ", propShowGlobal = " . shows pSG
     . showString ", propDescMod = _ }"
+    . showString ", propShowAllowed = " . shows pSA
 
 -- | A single option of a parser.
 data Option a = Option
@@ -442,3 +445,6 @@ optShowDefault = propShowDefault . optProps
 
 optDescMod :: Option a -> Maybe ( Doc -> Doc )
 optDescMod = propDescMod . optProps
+
+optShowAllowed :: Option a -> Chunk Doc
+optShowAllowed = propShowAllowed . optProps

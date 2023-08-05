@@ -36,6 +36,7 @@ module Options.Applicative.Builder (
   value,
   showDefaultWith,
   showDefault,
+  showAllowedText,
   metavar,
   noArgError,
   ParseError(..),
@@ -184,6 +185,10 @@ showDefaultWith s = Mod id (DefaultProp Nothing (Just s)) id
 -- | Show the default value for this option using its 'Show' instance.
 showDefault :: Show a => Mod f a
 showDefault = showDefaultWith show
+
+-- | Specify the help text for an option.
+showAllowedText :: String -> Mod f a
+showAllowedText s = optionMod $ \p -> p { propShowAllowed = paragraph s }
 
 -- | Specify the help text for an option.
 help :: String -> Mod f a
