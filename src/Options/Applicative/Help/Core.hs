@@ -198,12 +198,13 @@ optionsDesc global pprefs = tabulate (prefTabulateFill pprefs) . catMaybes . map
     doc info opt = do
       guard . not . isEmpty $ n
       guard . not . isEmpty $ h
-      return (extractChunk n, align . extractChunk $ h <</>> hdef)
+      return (extractChunk n, align . extractChunk $ h <</>> defaultAndAllowed)
       where
         n = fst $ optDesc pprefs style info opt
         h = optHelp opt
-        hdef = Chunk . fmap show_def . optShowDefault $ opt
-        show_def s = parens (pretty "default:" <+> pretty s)
+        defaultAndAllowed = tupled <$> ( sequenceA . (filter (not . isEmpty)) $ [defVal, allowedVals] )--(tupled <$> sequenceA [defVal, allowedVals]) -- filter not empty?
+        defVal = Chunk $ fmap (\s -> pretty "default:" <+> pretty s) (optShowDefault opt) 
+        allowedVals =  fmap ((pretty "allowed values:") <+>) (optShowAllowed opt)
     style = OptDescStyle
       { descSep = pretty ',',
         descHidden = True,

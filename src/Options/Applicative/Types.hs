@@ -156,7 +156,7 @@ data OptProperties = OptProperties
   , propShowDefault :: Maybe String       -- ^ what to show in the help text as the default
   , propShowGlobal :: Bool                -- ^ whether the option is presented in global options text
   , propDescMod :: Maybe ( Doc -> Doc )   -- ^ a function to run over the brief description
-  , propShowAllowed :: Chunk Doc       -- ^ what to show in the help text as the allowed values
+  , propShowAllowed :: Chunk Doc          -- ^ what to show in the help text as the allowed values
   }
 
 instance Show OptProperties where
